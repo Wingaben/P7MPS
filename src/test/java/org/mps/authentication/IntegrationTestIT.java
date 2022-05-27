@@ -67,6 +67,15 @@ public class IntegrationTestIT {
         userRegistration.register(birthdate, passwordString, credentialStore);
         assertThat(credentialStore.size()).isEqualTo(size);
     }
+    @Test
+    void credentialRegistrationWithExisitingValuesThrowsCredentialsException(){
+        birthdate = new Date(10, 7, 1997);
+        passwordString = new PasswordString("hello.992;");
+        credentialStore = new CredentialStoreSet();
+        credentialStore.register(birthdate, passwordString);
+        assertThatExceptionOfType(CredentialExistsException.class).isThrownBy(()
+                -> credentialStore.register(birthdate, passwordString));
+    }
 
     // useful functions
     private int registrationOfASpecificUserAndReturningInitialSize() {
