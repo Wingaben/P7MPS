@@ -59,7 +59,6 @@ public class IntegrationTestIT {
         credentialStore = new CredentialStoreSet();
         userRegistration = new UserRegistration();
         int size = credentialStore.size();
-        credentialStore.register(birthdate, passwordString);
         userRegistration.register(birthdate, passwordString, credentialStore);
         //assertThat(credentialStore.credentialExists(birthdate, passwordString)).isTrue();
         assertThat(credentialStore.size()).isEqualTo(size+1);

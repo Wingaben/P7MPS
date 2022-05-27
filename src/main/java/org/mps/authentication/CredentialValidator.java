@@ -23,7 +23,7 @@ public class CredentialValidator {
       result = ValidationStatus.BIRTHDAY_INVALID ;
     } else if (!passwordString.validate()) {
       result = ValidationStatus.PASSWORD_INVALID ;
-    } else if (!credentialStore.credentialExists(birthDate, passwordString)) {
+    } else if (credentialStore.credentialExists(birthDate, passwordString)) {
       result = ValidationStatus.EXISTING_CREDENTIAL ;
     }
     return result ;

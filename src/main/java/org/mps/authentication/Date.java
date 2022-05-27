@@ -2,6 +2,7 @@ package org.mps.authentication;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  * Class used to store and validate a date.
@@ -48,5 +49,18 @@ public class Date {
     } catch (ParseException exception) {
       return false ;
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Date date = (Date) o;
+    return day == date.day && month == date.month && year == date.year;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(day, month, year);
   }
 }
