@@ -34,10 +34,11 @@ public class IntegrationTestIT {
     }
 
     @Test
-    void validatorValidateReturnsPasswordInvalidIfCredentialIsExisting(){
+    void validatorValidateReturnsCredentialExistingIfCredentialContainsPairOfDateAndPassword(){
         birthdate = new Date(29, 2, 1980);
         passwordString = new PasswordString("hello.123;");
         credentialStore = new CredentialStoreSet();
+        credentialStore.register(birthdate,passwordString);
         cv = new CredentialValidator(birthdate, passwordString, credentialStore);
         assertThat(cv.validate()).isEqualTo(CredentialValidator.ValidationStatus.EXISTING_CREDENTIAL);
     }
@@ -48,20 +49,33 @@ public class IntegrationTestIT {
         passwordString = new PasswordString("hello.124;");
         credentialStore = new CredentialStoreSet();
         cv = new CredentialValidator(birthdate, passwordString, credentialStore);
-        credentialStore.register(birthdate, passwordString);
         assertThat(cv.validate()).isEqualTo(CredentialValidator.ValidationStatus.VALIDATION_OK);
     }
 
     @Test
     void userRegistrationOK(){
+        int size = registrationOfASpecificUserAndReturningInitialSize();
+        assertThat(credentialStore.credentialExists(birthdate, passwordString)).isTrue();
+        assertThat(credentialStore.size()).isEqualTo(size+1);
+    }
+
+
+    @Test
+    void userRegistrationWithExisitingCredentialsDoesntRegister(){
+        registrationOfASpecificUserAndReturningInitialSize();
+        int size = credentialStore.size();
+        userRegistration.register(birthdate, passwordString, credentialStore);
+        assertThat(credentialStore.size()).isEqualTo(size);
+    }
+
+    // useful functions
+    private int registrationOfASpecificUserAndReturningInitialSize() {
         birthdate = new Date(10, 7, 1997);
         passwordString = new PasswordString("hello.992;");
         credentialStore = new CredentialStoreSet();
         userRegistration = new UserRegistration();
         int size = credentialStore.size();
         userRegistration.register(birthdate, passwordString, credentialStore);
-        //assertThat(credentialStore.credentialExists(birthdate, passwordString)).isTrue();
-        assertThat(credentialStore.size()).isEqualTo(size+1);
+        return size;
     }
-
 }

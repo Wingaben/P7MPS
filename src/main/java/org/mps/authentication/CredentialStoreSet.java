@@ -1,6 +1,7 @@
 package org.mps.authentication;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class CredentialStoreSet implements CredentialStore {
@@ -61,5 +62,18 @@ public class CredentialStoreSet implements CredentialStore {
   @Override
   public int size() {
     return credentials.size() ;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CredentialStoreSet that = (CredentialStoreSet) o;
+    return Objects.equals(credentials, that.credentials);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(credentials);
   }
 }
